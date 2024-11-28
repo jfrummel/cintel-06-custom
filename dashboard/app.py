@@ -1,16 +1,16 @@
 import pandas as pd
 from shiny.express import input, ui
-from shiny import render, reactive
+from shiny import render, reactive, req
 from shinywidgets import render_widget  
 import plotly.express as px
-
+from shinyswatch import theme
 
 df = pd.read_csv("premier-player-23-24.csv")
 stats_df = df[["Player", "Pos", "Age", "MP", "Gls", "Ast", "Team"]]
 goal_range = [float(df["Gls"].min()),float(df["Gls"].max())]
 players = stats_df["Player"].tolist()
 
-ui.page_opts(title="Premier League Player Stats 2023-24", fillable=True)
+ui.page_opts(title="Premier League Player Stats 2023-24", fillable=True, theme=theme.darkly)
 with ui.sidebar(position="left", open="open", bg="f8f8f8"):
     ui.h2("Compare Players", style="text-align: center;", bg="#0a0a0a")
     
@@ -42,20 +42,24 @@ with ui.card(full_screen=True):
         ui.card_header("Player Comparison", style="text-align: center;")
 
         @render_widget
-        def plotly_scatterplot():
+        def plotly_bar():
             stat=input.select_stat()
             compare_df= filtered_data()
             chart = px.histogram(
-                compare_df, x=stat, y="Player", orientation='h'
+                compare_df, x=stat, y="Player", orientation='h', hover_data=input.select_stat()
             ).update_layout(
-                yaxis_title=f"{stat}",
-                xaxis_title="Player",
+                xaxis_title=f"{stat}",
+                yaxis_title="Player",
             )
+            chart.update_traces(hovertemplate='</b> %{y}<br></b> %{x}<br><b>')
+
+
             return chart
 
 
 @reactive.calc
 def filtered_data():
+    req(input.select_player())
     isPlayerMatch = stats_df["Player"].isin(input.select_player())
     selectStat = stats_df[input.select_stat()]
     return stats_df[isPlayerMatch & selectStat]
