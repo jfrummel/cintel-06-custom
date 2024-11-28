@@ -1,3 +1,4 @@
 pandas
 shiny
 shiny.express
+plotly
