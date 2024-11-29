@@ -11,7 +11,7 @@ stats_df = df[["Player", "Pos", "Age", "MP", "Gls", "Ast", "Team"]]
 goal_range = [float(df["Gls"].min()),float(df["Gls"].max())]
 players = stats_df["Player"].tolist()
 
-ui.page_opts(title="Premier League Player Stats 2023-24",window_title="Jeremy's Interactive App", fillable=True, theme=theme.darkly)
+ui.page_opts(title="⚽ Premier League Player Stats 2023-24",window_title="Jeremy's Interactive App", fillable=True, theme=theme.darkly)
 with ui.sidebar(position="left", open="open", bg="f8f8f8"):
     ui.h2("Compare Players", style="text-align: center;", bg="#0a0a0a")
     

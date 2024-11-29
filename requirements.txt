@@ -1,4 +1,6 @@
 pandas
 shiny
-shiny.express
+siny.express
 plotly
+shinyswatch
+shinywidgets
